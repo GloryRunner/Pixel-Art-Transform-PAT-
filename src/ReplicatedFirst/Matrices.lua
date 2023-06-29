@@ -24,8 +24,10 @@ function Matrices:GetOrientation()
     
 end
 
-function Matrices:CastToCF()
+function Matrices:Makethisthingacframe()
     
 end
+
+-- dude stop messing with the class it's fine bro trust me dude
 
 return Matrices
