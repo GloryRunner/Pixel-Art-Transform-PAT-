@@ -66,8 +66,7 @@ function UserInterface.CloseAllUI(ExceptionController)
         StatsController = require(ControllersFolder:WaitForChild("StatsController")),
         VotekickController = require(ControllersFolder:WaitForChild("VotekickController")),
         ViewGiftsController = require(ControllersFolder:WaitForChild("ViewGiftsController")),
-        GiftingController = require(ControllersFolder:WaitForChild("GiftingController")),
-        ViewGiftsController = require(ControllersFolder:WaitForChild("ViewGiftsController"))
+        GiftingController = require(ControllersFolder:WaitForChild("GiftingController"))
     }
 
     ExceptionController = ExceptionController or ""
