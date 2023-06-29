@@ -1,0 +1,13 @@
+MAKE SURE TO CHECK THAT THE USER HAS ACCESS TO THOSE GRID DIMENSIONS AND PIXEL COLORS -- DONE
+
+MAKE SURE GRID DIMENSIONS ARE VALID BY CHECKING FROM A FIXED LIST OF POSSIBLE GRIDS -- DONE
+
+  _____ _   _   _____  _____   ____   _____ _____  ______  _____ _____ 
+ |_   _| \ | | |  __ \|  __ \ / __ \ / ____|  __ \|  ____|/ ____/ ____|
+   | | |  \| | | |__) | |__) | |  | | |  __| |__) | |__  | (___| (___  
+   | | | . ` | |  ___/|  _  /| |  | | | |_ |  _  /|  __|  \___ \\___ \ 
+  _| |_| |\  | | |    | | \ \| |__| | |__| | | \ \| |____ ____) |___) |
+ |_____|_| \_| |_|    |_|  \_\\____/ \_____|_|  \_\______|_____/_____/ 
+                                                                       
+                                                                       
+MAKE SURE COLORS ARE VALID BY CHECKING FROM A FIXED LIST OF POSSIBLE COLORS
