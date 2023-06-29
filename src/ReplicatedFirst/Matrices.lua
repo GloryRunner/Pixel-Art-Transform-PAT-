@@ -15,3 +15,17 @@ end
 function Matrices:Orthonormalize()
     
 end
+
+function Matrices:Invert()
+
+end
+
+function Matrices:GetOrientation()
+    
+end
+
+function Matrices:CastToCF()
+    
+end
+
+return Matrices
