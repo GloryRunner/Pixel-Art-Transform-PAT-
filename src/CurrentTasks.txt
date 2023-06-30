@@ -8,4 +8,4 @@
     - Can't work on this system for the same reason I can't work
     on the hide pixel feature.
 
-Going to be working on the color shop menu or saving menu.
+Going to be working on the saving menu.
