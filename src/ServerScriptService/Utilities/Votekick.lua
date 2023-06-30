@@ -47,10 +47,15 @@ function Votekick.RequestVotekick(PlayerRequesting, VotedPlayer)
         table.insert(Votekicks[VotedPlayer], PlayerRequesting)
  
         local TimerThread = nil
-        TimerThread = task.spawn(Votekick.ClearVotekickRequestAfterTimer)
+        TimerThread = task.spawn(Votekick.ClearVotekickRequestAfterTimer, PlayerRequesting)
         TimerThreads[PlayerRequesting] = TimerThread
 
         local VotekickCount = Votekick.GetVotekickCountForPlayer(VotedPlayer)
+
+        --[[
+            Consider moving votekick requirements to a separate module or 
+            at least to the top of the script.
+        ]]
 
         if ServerPlayerCount >= 3 and ServerPlayerCount <= 10 then
             local PercentageRequired = 50
@@ -105,11 +110,11 @@ function Votekick.KickPlayer(KickedPlayer)
             Votekick.RemoveVotekickRequest(Player)
         end
     end
-    Votekicks[Player] = nil
+    Votekicks[KickedPlayer] = nil
     KickedPlayer:Kick("Votekicked")
 end
 
-function Votekick.ClearVotekickRequestAfterTimer()
+function Votekick.ClearVotekickRequestAfterTimer(Player)
     local WaitTime = 300
     task.wait(WaitTime)
     local ActiveVotekickRequest = Votekick.GetRequestedVotekick(Player)
