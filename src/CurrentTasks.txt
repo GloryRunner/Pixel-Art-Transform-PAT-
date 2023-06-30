@@ -9,3 +9,6 @@
     on the hide pixel feature.
 
 Going to be working on the saving menu.
+
+
+-- PRO POPUP MOUSE ENTER DOESN'T WORK PROPERLY -- REGULAR POPUP CODE MAKES IT WHITE
