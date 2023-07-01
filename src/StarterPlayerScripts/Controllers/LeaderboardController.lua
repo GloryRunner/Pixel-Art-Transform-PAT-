@@ -1,4 +1,5 @@
 local Players = game:GetService("Players")
+local TextService = game:GetService("TextService")
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -196,18 +197,7 @@ function LeaderboardController.OnLeaderslotClicked(Leaderslot)
         LeaderboardController.SetLeaderslotToInactive(Leaderslot)
     end
 
-    local NameLabel = HidePixelFrame.Visible and HidePixelFrame:WaitForChild("Name") or ProHidePixelFrame.Visible and ProHidePixelFrame:WaitForChild("Name")
-    local ImageLabel = HidePixelFrame.Visible and HidePixelFrame:WaitForChild("ImageLabel") or ProHidePixelFrame.Visible and ProHidePixelFrame:WaitForChild("ImageLabel")
-    local Player = Players:FindFirstChild(Leaderslot.Name)
-    local HasHidden = LeaderboardController.HasPixelHidden(Player)
-
-    if HasHidden then
-        NameLabel.Text = "Show pixel"
-        ImageLabel.Image = ShownPixelImageId
-    else
-        NameLabel.Text = "Hide pixel"
-        ImageLabel.Image = HiddenPixelImageId
-    end
+    LeaderboardController.SetPixelVisibilityText()
 
     SelectedLeaderslot = Leaderslot
 end
@@ -220,22 +210,41 @@ function LeaderboardController.OnPopupButtonLeave(PopupButtonFrame)
     PopupButtonFrame.BackgroundTransparency = 1
 end
 
+function LeaderboardController.SetPixelVisibilityText()
+    if RegularPopup.Visible or ProPopup.Visible then
+        local Player = Players:FindFirstChild(SelectedLeaderslot.Name)
+        local HasHidden = LeaderboardController.HasPixelHidden(Player)
+    
+        local NameLabel, ImageLabel
+    
+        if RegularPopup.Visible then
+            NameLabel = HidePixelFrame:WaitForChild("Name")
+            ImageLabel = HidePixelFrame:WaitForChild("ImageLabel")
+        elseif ProPopup.Visible then
+            NameLabel = ProHidePixelFrame:WaitForChild("Name")
+            ImageLabel = ProHidePixelFrame:WaitForChild("ImageLabel")
+        end
+
+        if HasHidden then
+            NameLabel.Text = "Show pixel"
+            ImageLabel.Image = ShownPixelImageId
+        else
+            NameLabel.Text = "Hide pixel"
+            ImageLabel.Image = HiddenPixelImageId
+        end
+    end
+end
+
 function LeaderboardController.OnHidePixelButtonActivated()
-    print("clicked")
     local SelectedPlayer = Players:FindFirstChild(SelectedLeaderslot.Name)
     if SelectedPlayer then
         local HasHidden = LeaderboardController.HasPixelHidden(SelectedPlayer)
-        local NameLabel = HidePixelFrame.Visible and HidePixelFrame:WaitForChild("Name") or ProHidePixelFrame.Visible and ProHidePixelFrame:WaitForChild("Name")
-        local ImageLabel = HidePixelFrame.Visible and HidePixelFrame:WaitForChild("ImageLabel") or ProHidePixelFrame.Visible and ProHidePixelFrame:WaitForChild("ImageLabel")
         if HasHidden then
             LeaderboardController.ShowPixel()
-            NameLabel.Text = "Hide pixel"
-            ImageLabel.Image = HiddenPixelImageId
         else
             LeaderboardController.HidePixel()
-            NameLabel.Text = "Show pixel"
-            ImageLabel.Image = ShownPixelImageId
         end
+        LeaderboardController.SetPixelVisibilityText()
     end
 end
 
