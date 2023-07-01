@@ -64,6 +64,8 @@ local LeaderboardController = {}
 local ActiveTopbarIcon = nil
 
 local PlayerPixels = {}
+local OnHidePixelCooldown = false
+local HidePixelCooldownDuration = 1
 
 function LeaderboardController.Init()
     task.spawn(function()
@@ -237,14 +239,19 @@ end
 
 function LeaderboardController.OnHidePixelButtonActivated()
     local SelectedPlayer = Players:FindFirstChild(SelectedLeaderslot.Name)
-    if SelectedPlayer then
+    if SelectedPlayer and not OnHidePixelCooldown then
         local HasHidden = LeaderboardController.HasPixelHidden(SelectedPlayer)
         if HasHidden then
             LeaderboardController.ShowPixel()
         else
             LeaderboardController.HidePixel()
         end
+        OnHidePixelCooldown = true
         LeaderboardController.SetPixelVisibilityText()
+        task.spawn(function()
+            task.wait(HidePixelCooldownDuration)
+            OnHidePixelCooldown = false
+        end)
     end
 end
 
