@@ -1,11 +1,5 @@
-- Hide Pixel
-    - Fix hide pixel button with pro leaderslot
-        - Requires testing. Can't run multiple instances for testing let alone open Roblox because
-    the domain has been blocked on the laptop. Going to wrap this up first thing tomorrow morning
-    before moving the card to complete and assigning the done tag.
+- Saving
+- Votekicking
+- Color Shop
 
-- Vote Kick System
-    - Can't work on this system for the same reason I can't work
-    on the hide pixel feature.
-
-Going to be working on the saving menu.
+Going to work on Votekicking.

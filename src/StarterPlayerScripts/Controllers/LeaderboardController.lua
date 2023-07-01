@@ -148,7 +148,7 @@ function LeaderboardController.AddPlayer(Player)
     local PlayerOwnsPro = UserOwnsGamepassRemote:InvokeServer(Player, ProGamepassId)
     local Leaderslot = nil
 
-    if PlayerOwnsPro or Player.Name == "GloryRunner" then -- DELETE THIS PLEASE
+    if PlayerOwnsPro then
         Leaderslot = ProLeaderslotTemplate:Clone()
     else
         Leaderslot = RegularLeaderslotTemplate:Clone()
