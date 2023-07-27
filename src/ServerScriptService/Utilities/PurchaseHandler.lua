@@ -57,6 +57,16 @@ function PurchaseHandler.IsGridSizeUnlockPurchase(ProductId)
     return false
 end
 
+function PurchaseHandler.IsSaveSlotUnlockPurchase(ProductId)
+    local SaveSlotUnlockIDs = IDs.DeveloperProducts.SaveSlotUnlock
+    for _, Id in pairs(SaveSlotUnlockIDs) do
+        if Id == ProductId then
+            return true
+        end
+    end
+    return false
+end
+
 function PurchaseHandler.GetDataFromProductId(ModuleContents, ProductId)
     for _, Dictionary in ipairs(ModuleContents) do
         local DictProductId = Dictionary.ProductId
@@ -86,6 +96,10 @@ function PurchaseHandler.CanPurchaseGridSizeUnlock(Player, ProductId)
     end
 end
 
+function PurchaseHandler.CanPurchaseSaveSlotUnlock(Player, ProductId)
+    
+end
+
 function PurchaseHandler.Init()
     MarketplaceService.ProcessReceipt = function(ReceiptInfo)
         local Player = Players:GetPlayerByUserId(ReceiptInfo.PlayerId)
@@ -94,7 +108,8 @@ function PurchaseHandler.Init()
         local IsCoinPurchase = PurchaseHandler.IsCoinPurchase(ProductId)
         local IsGiftedCoinPurchase = PurchaseHandler.IsGiftedCoinPurchase(ProductId)
         local IsGridSizeUnlockPurchase = PurchaseHandler.IsGridSizeUnlockPurchase(ProductId)
-        
+        local IsSaveSlotUnlockPurchase = PurchaseHandler.IsSaveSlotUnlockPurchase(ProductId)
+
         if IsCoinPurchase then
             CoinXPHandler.OnCoinsPurchased(Player, ProductId)
         elseif IsGiftedCoinPurchase then
@@ -106,6 +121,15 @@ function PurchaseHandler.Init()
                 local CurrencyName = GridSizeMetadata.CurrencyName
                 SetUserCurrency:Invoke(Player, CurrencyName, 1, false)
             end
+        elseif IsSaveSlotUnlockPurchase then
+            local CanPurchaseSaveSlotUnlock = PurchaseHandler.CanPurchaseSaveSlotUnlock(Player, ProductId)
+            --[[
+                if CanPurchaseGridSizeUnlock then
+                local GridSizeMetadata = PurchaseHandler.GetDataFromProductId(GridSizes.Constants, ProductId)
+                local CurrencyName = GridSizeMetadata.CurrencyName
+                SetUserCurrency:Invoke(Player, CurrencyName, 1, false)
+            end
+            ]]
         end
         return Enum.ProductPurchaseDecision.PurchaseGranted
     end

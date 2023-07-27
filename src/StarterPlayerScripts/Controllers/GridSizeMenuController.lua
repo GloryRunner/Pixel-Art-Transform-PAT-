@@ -234,18 +234,6 @@ function GridSizeMenuController.GetGridDataFromFrameName(Name)
     end
 end
 
-function GridSizeMenuController.LockGridSizeFrame(Frame)
-    local LockedOverlay = Frame:FindFirstChild("LockedOverlay")
-    if LockedOverlay then
-        local UnlockNowFrame = LockedOverlay:WaitForChild("UnlockNow")
-        local OrText = LockedOverlay:WaitForChild("ORText")
-        local OverlayButtonFrame = LockedOverlay:WaitForChild("OverlayButton")
-        OrText.Visible = false
-        UnlockNowFrame.Visible = false
-        OverlayButtonFrame.Visible = true   
-    end
-end
-
 function GridSizeMenuController.UnlockGridSizeFrame(Frame)
     local LockedOverlay = Frame:FindFirstChild("LockedOverlay")
     if LockedOverlay then

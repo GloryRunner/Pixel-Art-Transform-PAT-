@@ -23,11 +23,11 @@ CurrencyName = {
 
 local CurrencyTypes = {
     XP = {
-        InitialValue = Levels.GetXPFromLevel(1),
+        InitialValue = Levels.GetXPFromLevel(5),
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
-        DatastoreName = "XPStoretest90"
+        DatastoreName = "XPStoretdw32323est90" -- XPStoretest90
     },
     Coins = {
         InitialValue = 0,
@@ -92,28 +92,49 @@ local CurrencyTypes = {
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
-        DatastoreName = "Purchased11x11UnlockStore1" -- Purchased11x11UnlockStore1
+        DatastoreName = "Purchased11xdwdw11UnlockStore1" -- Purchased11x11UnlockStore1
     },
     Purchased13x13Unlock = {
         InitialValue = 0,
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
-        DatastoreName = "Purchased13x13UnlockStore1" -- Purchased13x13UnlockStore1
+        DatastoreName = "Purchased13xdwd13UnlockStore1" -- Purchased13x13UnlockStore1
     },
     Purchased15x15Unlock = {
         InitialValue = 0,
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
-        DatastoreName = "Purchased15x15UnlockStore1" -- Purchased15x15UnlockStore1
+        DatastoreName = "Purchased15x1dwd5UnlockStore1" -- Purchased15x15UnlockStore1
     },
     Purchased17x17Unlock = {
         InitialValue = 0,
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
-        DatastoreName = "Purchased17x17UnlockStore1" -- Purchased17x17UnlockStore1
+        DatastoreName = "Purchased17xdwd17UnlockStore1" -- Purchased17x17UnlockStore1
+    },
+    PurchasedLvl5SaveSlotUnlock = {
+        InitialValue = 0,
+        DisplayOnLeaderboard = false,
+        SaveToDS = true,
+        LeaderstatsPos = nil,
+        DatastoreName = "PurchasedLvl5SaveSlotUnlock" -- PurchasedLvl5SaveSlotUnlock
+    },
+    PurchasedLvl15SaveSlotUnlock = {
+        InitialValue = 0,
+        DisplayOnLeaderboard = false,
+        SaveToDS = true,
+        LeaderstatsPos = nil,
+        DatastoreName = "PurchasedLvl15SaveSlotUnlock" -- PurchasedLvl15SaveSlotUnlock
+    },
+    PurchasedLvl25SaveSlotUnlock = {
+        InitialValue = 0,
+        DisplayOnLeaderboard = false,
+        SaveToDS = true,
+        LeaderstatsPos = nil,
+        DatastoreName = "PurchasedLvl25SaveSlotUnlock" -- PurchasedLvl25SaveSlotUnlock
     }
 }
 
