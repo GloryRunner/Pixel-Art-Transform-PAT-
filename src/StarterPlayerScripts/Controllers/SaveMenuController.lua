@@ -135,7 +135,7 @@ end
 
 function SaveMenuController.UnlockSaveSlotFrame(Frame)
 
-    -- needs to set slot name
+    -- needs to set slot name. group slot is not part of the linear progression. it is independent
 
     local LockedOverlay = Frame:FindFirstChild("LockedOverlay")
     if LockedOverlay then
