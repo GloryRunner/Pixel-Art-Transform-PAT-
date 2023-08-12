@@ -6,59 +6,59 @@ local GetUserCurrency = ReplicatedStorage:WaitForChild("GetUserCurrency")
 local Levels = require(SharedUtilities.Levels)
 
 local SaveSlots = {}
-SaveSlots.Constants = {
+SaveSlots.RegularSlots = {
     {
         RequiredLevel = 1,
         FrameName = "Slot1",
-        UnlockProductId = nil,
-        SpecialRequirement = nil,
+        ProductId = nil,
+        PurchasePriority = 0,
         CurrencyName = nil
     },
     {
         RequiredLevel = 1,
         FrameName = "Slot2",
-        UnlockProductId = nil,
-        SpecialRequirement = nil,
+        ProductId = nil,
+        PurchasePriority = 0,
         CurrencyName = nil
     },
     {
-        RequiredLevel = 1,
-        FrameName = "SlotGroup",
-        UnlockProductId = nil,
-        SpecialRequirement = function(Player)
-            local GroupService = game:GetService("GroupService")
-            local MainGroupId = IDs["7Wapy"]
-            for _, GroupData in ipairs(GroupService:GetGroupsAsync(Player.UserId)) do
-                local GroupId = GroupData.Id
-                if GroupId == MainGroupId then
-                    return true
-                end
-            end
-            return false
-        end,
-        CurrencyName = nil
-    },
-    {
+
         RequiredLevel = 5,
         FrameName = "Z.Slot3",
-        UnlockProductId = SaveSlotUnlockIDs["Lvl5"],
-        SpecialRequirement = nil,
+        ProductId = SaveSlotUnlockIDs["Lvl5"],
+        PurchasePriority = 1,
         CurrencyName = "PurchasedLvl5SaveSlotUnlock"
     },
     {
+
         RequiredLevel = 15,
         FrameName = "Z.Slot4",
-        UnlockProductId = SaveSlotUnlockIDs["Lvl15"],
-        SpecialRequirement = nil,
+        ProductId = SaveSlotUnlockIDs["Lvl15"],
+        PurchasePriority = 2,
         CurrencyName = "PurchasedLvl15SaveSlotUnlock"
     },
     {
         RequiredLevel = 25,
         FrameName = "Z.Slot5",
-        UnlockProductId = SaveSlotUnlockIDs["Lvl25"],
+        ProductId = SaveSlotUnlockIDs["Lvl25"],
         SpecialRequirement = nil,
         CurrencyName = "PurchasedLvl25SaveSlotUnlock"
     }
+}
+
+SaveSlots.GroupSlot = {
+    FrameName = "SlotGroup",
+    HasUnlocked = function(Player)
+        local GroupService = game:GetService("GroupService")
+        local MainGroupId = IDs["7Wapy"]
+        for _, GroupData in ipairs(GroupService:GetGroupsAsync(Player.UserId)) do
+            local GroupId = GroupData.Id
+            if GroupId == MainGroupId then
+                return true
+            end
+        end
+        return false
+    end
 }
 
 return SaveSlots

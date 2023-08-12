@@ -133,13 +133,14 @@ function GridSizeMenuController.Init()
     end
     
     GridSizeMenuController.UpdateLockedOverlays()
-    OnCurrencyChangeEvent.OnClientEvent:Connect(function(CurrencyName)
+    OnCurrencyChangeEvent.OnClientEvent:Connect(function(CurrencyName, NewCurrencyAmount)
         if CurrencyName == "XP" then
             GridSizeMenuController.UpdateLockedOverlays()
         end
         for _, GridSizeData in ipairs(GridSizes.Constants) do
             local GridSizeCurrencyName = GridSizeData.CurrencyName
-            if CurrencyName == GridSizeCurrencyName then
+            local HasPurchased = NewCurrencyAmount == 1
+            if CurrencyName == GridSizeCurrencyName and HasPurchased then
                 GridSizeMenuController.UpdateLockedOverlays()
             end
         end
@@ -182,16 +183,15 @@ function GridSizeMenuController.UpdateLockedOverlays()
         end
     end
 
-
     for _, GridSizeData in ipairs(GridSizes.Constants) do
-        local GridSizeRequiredLevel = GridSizeData.RequiredLevel
-        if GridSizeRequiredLevel > 1 then
-            local GridSizeProductId = GridSizeData.ProductId
-            local GridSizeCurrencyName = GridSizeData.CurrencyName
-            local GridSizeFrameName = GridSizeData.FrameName
-            local HasPurchasedInstantUnlock = GetPlayerCurrency:InvokeServer(LocalPlayer, GridSizeCurrencyName) == 1
-            if CurrentLevel < GridSizeRequiredLevel and not HasPurchasedInstantUnlock then
-                local FrameToUnlock = ScrollingFrame:WaitForChild(GridSizeFrameName)
+        local RequiredLevel = GridSizeData.RequiredLevel
+        if RequiredLevel > 1 then
+            local ProductId = GridSizeData.ProductId
+            local CurrencyName = GridSizeData.CurrencyName
+            local FrameName = GridSizeData.FrameName
+            local HasPurchasedInstantUnlock = GetPlayerCurrency:InvokeServer(LocalPlayer, CurrencyName) == 1
+            if CurrentLevel < RequiredLevel and not HasPurchasedInstantUnlock then
+                local FrameToUnlock = ScrollingFrame:WaitForChild(FrameName)
                 GridSizeMenuController.UnlockGridSizeFrame(FrameToUnlock)
                 break
             end

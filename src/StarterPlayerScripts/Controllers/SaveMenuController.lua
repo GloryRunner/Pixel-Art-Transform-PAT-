@@ -33,10 +33,10 @@ local UnlockedBackgroundColor = Color3.fromRGB(53, 63, 67)
 local SaveMenuController = {}
 
 function SaveMenuController.Init()
-    for _, SaveSlotData in ipairs(SaveSlots.Constants) do
+    for _, SaveSlotData in ipairs(SaveSlots.RegularSlots) do
         local FrameName = SaveSlotData.FrameName
         local RequiredLevel = SaveSlotData.RequiredLevel
-        local UnlockProductId = SaveSlotData.UnlockProductId
+        local UnlockProductId = SaveSlotData.ProductId
         local Frame = ScrollingFrame:FindFirstChild(FrameName)
         local HasLevelRequirement = RequiredLevel > 1
         if HasLevelRequirement and UnlockProductId then
@@ -49,64 +49,60 @@ function SaveMenuController.Init()
         end
     end
 
-    task.spawn(function()
-        task.wait(5)
-        SaveMenuController.UnlockSaveSlotFrame(ScrollingFrame:WaitForChild("Z.Slot3"))
-    end)
-
-    SaveMenuController.UpdateLevelOverlays()
-    SaveMenuController.UpdateGroupOverlay()
+    SaveMenuController.UpdateLevelLockedOverlays()
+    SaveMenuController.UpdateGroupLockedOverlay()
 
     OnCurrencyChangeEvent.OnClientEvent:Connect(function(CurrencyName, NewCurrencyAmount)
         if CurrencyName == "XP" then
-            SaveMenuController.UpdateLevelOverlays()
-            for _, SaveSlotData in ipairs(SaveSlots.Constants) do
+            SaveMenuController.UpdateLevelLockedOverlays()
+        else
+
+            -- Not functioning properly
+
+            for _, SaveSlotData in ipairs(SaveSlots.RegularSlots) do
                 local FrameName = SaveSlotData.FrameName
                 local Frame = ScrollingFrame:FindFirstChild(FrameName)
                 local LockedOverlay = Frame:FindFirstChild("LockedOverlay")
                 local SaveSlotCurrencyName = SaveSlotData.CurrencyName
                 local PurchasedInstantUnlock = NewCurrencyAmount == 1
-                if SaveSlotCurrencyName and SaveSlotCurrencyName == CurrencyName then
-                    if PurchasedInstantUnlock and LockedOverlay then
-                        LockedOverlay:Destroy()
+                if LockedOverlay then
+                    if SaveSlotCurrencyName == CurrencyName and PurchasedInstantUnlock then
+                        SaveMenuController.UpdateLevelLockedOverlays()
                     end
                 end
             end
         end
     end)
 
-    JoinButton.Activated:Connect(SaveMenuController.UpdateGroupOverlay)
+    JoinButton.Activated:Connect(SaveMenuController.UpdateGroupLockedOverlay)
     CloseButton.Activated:Connect(SaveMenuController.CloseMenu)
 end
 
-function SaveMenuController.UpdateGroupOverlay()
-    if GroupSlotOverlayFrame then
-        for _, SaveSlotData in ipairs(SaveSlots.Constants) do
-            local FrameName = SaveSlotData.FrameName
-            local Frame = ScrollingFrame:FindFirstChild(FrameName)
-            local LockedOverlay = Frame:FindFirstChild("LockedOverlay")
-            if SaveSlotData.FrameName == "SlotGroup" then
-                local GroupRequirementCallback = SaveSlotData.SpecialRequirement
-                local IsGroupMember = GroupRequirementCallback(LocalPlayer) == true
-                if IsGroupMember and LockedOverlay then
-                    SaveMenuController.UnlockSaveSlotFrame(Frame)
-                end
-            end
-        end
+function SaveMenuController.UpdateGroupLockedOverlay()
+    local GroupSlotData = SaveSlots.GroupSlot
+    local HasUnlockedGroupSlot = GroupSlotData.HasUnlocked(LocalPlayer)
+    local FrameName = GroupSlotData.FrameName
+    local Frame = ScrollingFrame:FindFirstChild(FrameName)
+    local LockedOverlay = Frame:FindFirstChild("LockedOverlay")
+    if LockedOverlay and HasUnlockedGroupSlot then
+        LockedOverlay:Destroy()
+        Frame.BackgroundColor3 = UnlockedBackgroundColor
     end
 end
 
-function SaveMenuController.UpdateLevelOverlays()
+function SaveMenuController.UpdateLevelLockedOverlays()
     local CurrentXP = GetPlayerCurrency:InvokeServer(LocalPlayer, "XP")
     local CurrentLevel = Levels.GetLevelFromXP(CurrentXP)
     
-    for _, SaveSlotData in ipairs(SaveSlots.Constants) do
+    for _, SaveSlotData in ipairs(SaveSlots.RegularSlots) do
         local FrameName = SaveSlotData.FrameName
         local RequiredLevel = SaveSlotData.RequiredLevel
+        local CurrencyName = SaveSlotData.CurrencyName
         local Frame = ScrollingFrame:FindFirstChild(FrameName)
         local LockedOverlay = Frame:FindFirstChild("LockedOverlay")
-        if Frame and LockedOverlay and RequiredLevel > 1 then
-            if CurrentLevel >= RequiredLevel then
+        if Frame and LockedOverlay then
+            local HasPurchasedInstantUnlock = GetPlayerCurrency:InvokeServer(LocalPlayer, CurrencyName) == 1
+            if CurrentLevel >= RequiredLevel or HasPurchasedInstantUnlock then
                 -- stops unlock now button from tweening once overlay is destroyed to get rid of null refs
                 --[[
                     for Index, FrameTweenData in ipairs(TweenFrames) do
@@ -117,6 +113,7 @@ function SaveMenuController.UpdateLevelOverlays()
                 end
                 ]]
                 LockedOverlay:Destroy()
+                Frame.BackgroundColor3 = UnlockedBackgroundColor
             else
                 local UnlockNowFrame = LockedOverlay:WaitForChild("UnlockNow")
                 local UnlockNowButton = UnlockNowFrame:WaitForChild("Button")
@@ -131,31 +128,69 @@ function SaveMenuController.UpdateLevelOverlays()
             end
         end
     end
-end
 
-function SaveMenuController.UnlockSaveSlotFrame(Frame)
-
-    -- needs to set slot name. group slot is not part of the linear progression. it is independent
-
-    local LockedOverlay = Frame:FindFirstChild("LockedOverlay")
-    if LockedOverlay then
-        local UnlockNowFrame = LockedOverlay:WaitForChild("UnlockNow")
-        if UnlockNowFrame then
-            local OrText = LockedOverlay:WaitForChild("ORText")
-            local OverlayButtonFrame = LockedOverlay:WaitForChild("OverlayButton")
-            OrText.Visible = true
-            UnlockNowFrame.Visible = true
-            OverlayButtonFrame.Visible = false 
+    for _, SaveSlotData in ipairs(SaveSlots.RegularSlots) do
+        local RequiredLevel = SaveSlotData.RequiredLevel
+        if RequiredLevel > 1 then
+            local ProductId = SaveSlotData.ProductId
+            local CurrencyName = SaveSlotData.CurrencyName
+            local FrameName = SaveSlotData.FrameName
+            local HasPurchasedInstantUnlock = GetPlayerCurrency:InvokeServer(LocalPlayer, CurrencyName) == 1
+            if CurrentLevel < RequiredLevel and not HasPurchasedInstantUnlock then
+                local FrameToUnlock = ScrollingFrame:WaitForChild(FrameName)
+                SaveMenuController.UnlockSaveSlotFrame(FrameToUnlock)
+                break
+            end
         end
     end
 end
 
+function SaveMenuController.UnlockSaveSlotFrame(Frame)
+    local LockedOverlay = Frame:FindFirstChild("LockedOverlay")
+    if LockedOverlay then
+        local UnlockNowFrame = LockedOverlay:WaitForChild("UnlockNow")
+        local OrText = Frame:WaitForChild("ORText")
+        local OverlayButtonFrame = LockedOverlay:WaitForChild("OverlayButton")
+        OrText.Visible = true
+        UnlockNowFrame.Visible = true
+        OverlayButtonFrame.Visible = false 
+    end
+end
+
+function SaveMenuController.EnableLoadingFromSlot(Frame)
+    local LoadableBackgroundTransparency = 0
+    local LoadableTextTransparency = 0
+
+    local LoadButton = Frame:WaitForChild("LoadButton")
+    local LoadTextLabel = LoadButton:WaitForChild("TextLabel")
+    
+    LoadButton.BackgroundTransparency = LoadableBackgroundTransparency
+    LoadTextLabel.TextTransparency = LoadableTextTransparency
+end
+
+function SaveMenuController.DisableLoadingFromSlot(Frame)
+
+    -- Will be used when players who leave the group in game have the group slot unlocked and need it locked again
+
+    local NonLoadableTextTransparency = 0.5
+    local NonLoadableBackgroundTransparency = 0.5
+
+    local LoadButton = Frame:WaitForChild("LoadButton")
+    local LoadTextLabel = LoadButton:WaitForChild("TextLabel")
+    
+    LoadButton.BackgroundTransparency = NonLoadableTextTransparency
+    LoadTextLabel.TextTransparency = NonLoadableTextTransparency
+end
+
 function SaveMenuController.OpenMenu()
     SaveMenuFrame.Visible = true
+    SelectSlotFrame.Visible = true
 end
 
 function SaveMenuController.CloseMenu()
     SaveMenuFrame.Visible = false
+    SelectSlotFrame.Visible = false
+    ConfirmSaveFrame.Visible = false
 end
 
 return SaveMenuController

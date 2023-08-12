@@ -12,6 +12,7 @@ local Levels = require(SharedUtilities.Levels)
 local CoinXPHandler = require(Statistics.CoinXPHandler)
 local ChatTags = require(script.Parent.ChatTags)
 local GridSizes = require(Constants:WaitForChild("GridSizes"))
+local SaveSlots = require(Constants:WaitForChild("SaveSlots"))
 
 local GetUserCurrency = ReplicatedStorage:WaitForChild("GetUserCurrency")
 local SetUserCurrency = ReplicatedStorage:WaitForChild("SetUserCurrency")
@@ -76,17 +77,18 @@ function PurchaseHandler.GetDataFromProductId(ModuleContents, ProductId)
     end
 end
 
-function PurchaseHandler.CanPurchaseGridSizeUnlock(Player, ProductId)
+-- Used for typical unlockables with level-based progression & instant-unlocks
+function PurchaseHandler.CanPurchaseUnlockable(Player, ProductId, UnlockableData)
     local CurrentXP = GetUserCurrency:Invoke(Player, "XP")
     local CurrentLevel = Levels.GetLevelFromXP(CurrentXP)
-    for _, GridSizeData in ipairs(GridSizes.Constants) do
-        local GridSizeRequiredLevel = GridSizeData.RequiredLevel
-        if GridSizeRequiredLevel > 1 then
-            local GridSizeProductId = GridSizeData.ProductId
-            local GridSizeCurrencyName = GridSizeData.CurrencyName
-            local HasPurchasedInstantUnlock = GetUserCurrency:Invoke(Player, GridSizeCurrencyName) == 1
-            if CurrentLevel < GridSizeRequiredLevel and not HasPurchasedInstantUnlock then
-                if GridSizeProductId == ProductId then
+    for _, Data in ipairs(UnlockableData) do
+        local RequiredLevel = Data.RequiredLevel
+        if RequiredLevel > 1 then
+            local ProductId = Data.ProductId
+            local CurrencyName = Data.CurrencyName
+            local HasPurchasedInstantUnlock = GetUserCurrency:Invoke(Player, CurrencyName) == 1
+            if CurrentLevel < RequiredLevel and not HasPurchasedInstantUnlock then
+                if ProductId == ProductId then
                     return true
                 else
                     return false
@@ -94,10 +96,6 @@ function PurchaseHandler.CanPurchaseGridSizeUnlock(Player, ProductId)
             end
         end
     end
-end
-
-function PurchaseHandler.CanPurchaseSaveSlotUnlock(Player, ProductId)
-    
 end
 
 function PurchaseHandler.Init()
@@ -115,21 +113,19 @@ function PurchaseHandler.Init()
         elseif IsGiftedCoinPurchase then
             AwardGift:Invoke(Player, ProductId, PurchaseId)
         elseif IsGridSizeUnlockPurchase then
-            local CanPurchaseGridSizeUnlock = PurchaseHandler.CanPurchaseGridSizeUnlock(Player, ProductId)
+            local CanPurchaseGridSizeUnlock = PurchaseHandler.CanPurchaseUnlockable(Player, ProductId, GridSizes.Constants)
             if CanPurchaseGridSizeUnlock then
-                local GridSizeMetadata = PurchaseHandler.GetDataFromProductId(GridSizes.Constants, ProductId)
-                local CurrencyName = GridSizeMetadata.CurrencyName
+                local GridSizeData = PurchaseHandler.GetDataFromProductId(GridSizes.Constants, ProductId)
+                local CurrencyName = GridSizeData.CurrencyName
                 SetUserCurrency:Invoke(Player, CurrencyName, 1, false)
             end
         elseif IsSaveSlotUnlockPurchase then
-            local CanPurchaseSaveSlotUnlock = PurchaseHandler.CanPurchaseSaveSlotUnlock(Player, ProductId)
-            --[[
-                if CanPurchaseGridSizeUnlock then
-                local GridSizeMetadata = PurchaseHandler.GetDataFromProductId(GridSizes.Constants, ProductId)
-                local CurrencyName = GridSizeMetadata.CurrencyName
+            local CanPurchaseSaveSlotUnlock = PurchaseHandler.CanPurchaseUnlockable(Player, ProductId, SaveSlots.RegularSlots)
+            if CanPurchaseSaveSlotUnlock then
+                local SaveSlotData = PurchaseHandler.GetDataFromProductId(SaveSlots.RegularSlots, ProductId)
+                local CurrencyName = SaveSlotData.CurrencyName
                 SetUserCurrency:Invoke(Player, CurrencyName, 1, false)
             end
-            ]]
         end
         return Enum.ProductPurchaseDecision.PurchaseGranted
     end
