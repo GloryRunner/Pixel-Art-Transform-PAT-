@@ -27,7 +27,7 @@ local CurrencyTypes = {
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
-        DatastoreName = "XPStoretdw32323est90" -- XPStoretest90
+        DatastoreName = "XPStoretest90" -- XPStoretest90
     },
     Coins = {
         InitialValue = 0,
@@ -92,28 +92,28 @@ local CurrencyTypes = {
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
-        DatastoreName = "Purchased11xdwdw11UnlockStore1" -- Purchased11x11UnlockStore1
+        DatastoreName = "Purchased11x11UnlockStore1" -- Purchased11x11UnlockStore1
     },
     Purchased13x13Unlock = {
         InitialValue = 0,
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
-        DatastoreName = "Purchased13xdwd13UnlockStore1" -- Purchased13x13UnlockStore1
+        DatastoreName = "Purchased13x13UnlockStore1" -- Purchased13x13UnlockStore1
     },
     Purchased15x15Unlock = {
         InitialValue = 0,
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
-        DatastoreName = "Purchased15x1dwd5UnlockStore1" -- Purchased15x15UnlockStore1
+        DatastoreName = "Purchased15x15UnlockStore1" -- Purchased15x15UnlockStore1
     },
     Purchased17x17Unlock = {
         InitialValue = 0,
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
-        DatastoreName = "Purchased17xdwd17UnlockStore1" -- Purchased17x17UnlockStore1
+        DatastoreName = "Purchased17x17UnlockStore1" -- Purchased17x17UnlockStore1
     },
     PurchasedLvl5SaveSlotUnlock = {
         InitialValue = 0,
