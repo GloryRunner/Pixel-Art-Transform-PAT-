@@ -23,7 +23,7 @@ CurrencyName = {
 
 local CurrencyTypes = {
     XP = {
-        InitialValue = Levels.GetXPFromLevel(5),
+        InitialValue = Levels.GetXPFromLevel(1),
         DisplayOnLeaderboard = false,
         SaveToDS = true,
         LeaderstatsPos = nil,
